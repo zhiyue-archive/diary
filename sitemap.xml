@@ -2,13 +2,18 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://diary.printf.me/2015/06/02/hello-world/</loc>
-    <lastmod>2015-06-02T18:41:13.056Z</lastmod>
+    <loc>http://diary.printf.me/2015/06/08/hello-world/</loc>
+    <lastmod>2015-06-08T07:51:28.877Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://diary.printf.me/2015/06/08/2015-06-08-your-filename/</loc>
+    <lastmod>2015-06-08T07:51:28.877Z</lastmod>
   </url>
   
   <url>
     <loc>http://diary.printf.me/tags/index.html</loc>
-    <lastmod>2015-06-02T18:41:13.056Z</lastmod>
+    <lastmod>2015-06-08T07:51:28.877Z</lastmod>
   </url>
   
 </urlset>
