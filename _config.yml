@@ -127,6 +127,12 @@ duoshuo_hotartical: true
 ##　inner search 
 swiftype_key: 6GuPJyur5SvWLxxrRyYf
 
+# Social links
+social:
+  github: https://github.com/zhiyue
+  weibo: http://weibo.com/2372807992
+  douban: http://douban.com/people/47771675
+
 # =============================================================================
 # End NexT Theme configuration
 # =============================================================================
