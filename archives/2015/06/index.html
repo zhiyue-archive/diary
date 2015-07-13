@@ -15,6 +15,8 @@
   <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
 
 
+
+
 <link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.3"/>
 
 
@@ -179,37 +181,6 @@
 
       <div class="post-title">
         
-            <a class="post-title-link" href="/2015/06/17/hello-world/">
-              Hello World
-            </a>
-        
-      </div>
-
-      <div class="post-meta">
-        <span class="post-time"> 06-17 </span>
-      </div>
-
-    </div>
-  </div>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <div class="post post-type-normal">
-    <div class="post-header">
-
-      <div class="post-title">
-        
             <a class="post-title-link" href="/2015/06/08/2015-06-08-your-filename/">
               使用Docker部署IPython
             </a>
@@ -319,6 +290,10 @@
           </div>
         
 
+        <div class="links-of-author motion-element">
+          
+        </div>
+        
       </div>
 
       
@@ -432,5 +407,16 @@
   
   
 
+
+  <!-- lazyload -->
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+      <script type="text/javascript">
+        jQuery(function() {
+            jQuery("#posts img").lazyload({
+              placeholder:"/images/placeholder.gif",
+                effect:"fadeIn"
+              });
+            });
+    </script>
 </body>
 </html>
