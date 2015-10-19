@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  
   <title><![CDATA[Just Do IT]]></title>
   <subtitle><![CDATA[record]]></subtitle>
   <link href="/atom.xml" rel="self"/>
-  <link href="http://diary.printf.me//"/>
-  <updated>2015-08-06T09:06:34.630Z</updated>
-  <id>http://diary.printf.me//</id>
+  <link href="http://diary.printf.me/"/>
+  <updated>2015-10-19T06:34:08.456Z</updated>
+  <id>http://diary.printf.me/</id>
   
   <author>
     <name><![CDATA[zhiyue]]></name>
@@ -17,10 +16,10 @@
   
   <entry>
     <title><![CDATA[Hello World]]></title>
-    <link href="http://diary.printf.me/2015/08/06/hello-world/"/>
-    <id>http://diary.printf.me/2015/08/06/hello-world/</id>
-    <published>2015-08-06T09:06:34.630Z</published>
-    <updated>2015-08-06T09:06:34.630Z</updated>
+    <link href="http://diary.printf.me/2015/10/19/hello-world/"/>
+    <id>http://diary.printf.me/2015/10/19/hello-world/</id>
+    <published>2015-10-19T06:34:08.456Z</published>
+    <updated>2015-10-19T06:34:08.456Z</updated>
     <content type="html"><![CDATA[<p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
 <h2 id="Quick_Start">Quick Start</h2><h3 id="Create_a_new_post">Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
 <p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
@@ -42,7 +41,7 @@
     <link href="http://diary.printf.me/2015/06/08/2015-06-08-your-filename/"/>
     <id>http://diary.printf.me/2015/06/08/2015-06-08-your-filename/</id>
     <published>2015-06-08T16:21:56.000Z</published>
-    <updated>2015-08-06T09:06:34.630Z</updated>
+    <updated>2015-10-19T06:34:08.456Z</updated>
     <content type="html"><![CDATA[<p><img src="http://zhiyue.qiniudn.com/15-6-8/63734849.jpg" alt="docker"><br><a id="more"></a></p>
 <blockquote>
 <p>本文的部署环境是Ubuntu 14.04 </p>
@@ -83,7 +82,7 @@
 <li>scipystack</li>
 <li>nbvierer</li>
 </ul>
-<p>简单说一下这几个镜像的区别 <code>ipython</code> 是以上几个镜像的共同的根镜像。<code>notebook</code> 提供了一个web的前端。<code>scipystack</code>在<code>ipython</code>的基础上安装了许多科学计算的包(cython,h5py,matplotlib,numpy,pandas,patsy,scikit-learn,scipy,seaborn,sympy,yt)，而<code>scipyserver</code>则在<code>scipystack</code>的基础上提供了web的前端。<code>nbviewer</code>则是<a href="nbviewer.ipython.org">nbviewer.ipython.org</a>的实现<br>更多详细信息请到GitHub上的<a href="https://github.com/ipython/docker-notebook" target="_blank" rel="external">docker-notebook</a> 查看<br>选择<code>scipystack</code>镜像最省事，但是需要下载的东西也越多。下文选择的也是<code>scipystack</code><br><figure class="highlight elixir"><table><tr><td class="code"><pre><span class="line"><span class="variable">$ </span>sudo docker pull ipython/scipyserver</span><br></pre></td></tr></table></figure></p>
+<p>简单说一下这几个镜像的区别 <code>ipython</code> 是以上几个镜像的共同的根镜像。<code>notebook</code> 提供了一个web的前端。<code>scipystack</code>在<code>ipython</code>的基础上安装了许多科学计算的包(cython,h5py,matplotlib,numpy,pandas,patsy,scikit-learn,scipy,seaborn,sympy,yt)，而<code>scipyserver</code>则在<code>scipystack</code>的基础上提供了web的前端。<code>nbviewer</code>则是<a href="nbviewer.ipython.org">nbviewer.ipython.org</a>的实现<br>更多详细信息请到GitHub上的<a href="https://github.com/ipython/docker-notebook" target="_blank" rel="external">docker-notebook</a> 查看<br>选择<code>scipystack</code>镜像最省事，但是需要下载的东西也越多。下文选择的也是<code>scipystack</code><br><figure class="highlight crystal"><table><tr><td class="code"><pre><span class="line"><span class="variable">$ </span>sudo docker pull ipython/scipyserver</span><br></pre></td></tr></table></figure></p>
 <h4 id="运行IPython_容器">运行IPython 容器</h4><figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">sudo docker run -d --name IPythonApp -p <span class="number">8888</span>:<span class="number">8888</span> -e <span class="string">"PASSWORD=your password"</span> -e <span class="string">"USE_HTTP=1"</span> -v <span class="regexp">/home/</span>zhiyue<span class="regexp">/repos/</span>ipython-<span class="string">notebook:</span><span class="regexp">/notebooks ipython/</span>scipyserver</span><br></pre></td></tr></table></figure>
 <p>解析一下参数<code>-d</code> 是以后台的方式运行，<code>--name</code> 是容器的别名，<code>-p</code> 是端口映射，<code>-e</code> 是设置环境变量，这里的环境变量<code>PASSWORD</code>设置成你自己的密码就可以了，<code>USE_HTTP=1</code> 意思是使用http，<code>-v</code> 是设置数据卷，把宿主机的目录挂载到容器里，即使容器被删除，数据也可以保留下来</p>
 <h3 id="Nginx_反向代理_IPython">Nginx 反向代理 IPython</h3><p>有两种方式，一种是使用官方的Nginx，另一种是使用<a href="https://registry.hub.docker.com/u/jwilder/nginx-proxy/" target="_blank" rel="external">jwilder / nginx-proxy</a>，后一种方法更加简单和方便</p>
