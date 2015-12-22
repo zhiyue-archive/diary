@@ -1,0 +1,812 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+  
+    <link href='//fonts.lug.ustc.edu.cn/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+  
+
+
+<link rel="stylesheet" type="text/css" href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" />
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="keywords" content="工具,教程,音频,音频开发," />
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Just Do IT" type="application/atom+xml" />
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="最近因为要音频处理的研究,音频开发，但是有一个难题就是怎么解析与提取音频的数据,于是就找到了FFmpeg。基本上只要做视频音频开发都离不开ffmpeg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FFmpeg的使用">
+<meta property="og:url" content="http://diary.printf.me/2014/06/09/ffmpeg的使用/index.html">
+<meta property="og:site_name" content="Just Do IT">
+<meta property="og:description" content="最近因为要音频处理的研究,音频开发，但是有一个难题就是怎么解析与提取音频的数据,于是就找到了FFmpeg。基本上只要做视频音频开发都离不开ffmpeg">
+<meta property="og:image" content="http://printf.qiniudn.com/20140616102021781.png">
+<meta property="og:image" content="http://printf.qiniudn.com/20140616102021781.png">
+<meta property="og:image" content="http://printf.qiniudn.com/20140730113852.png">
+<meta property="og:updated_time" content="2015-12-22T07:59:42.369Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="FFmpeg的使用">
+<meta name="twitter:description" content="最近因为要音频处理的研究,音频开发，但是有一个难题就是怎么解析与提取音频的数据,于是就找到了FFmpeg。基本上只要做视频音频开发都离不开ffmpeg">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'hide'
+  };
+</script>
+
+
+
+  <title> FFmpeg的使用 | Just Do IT </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?c64fc526014be6fca3d64a14960db2c2";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Just Do IT</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">record</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <form class="site-search-form">
+    <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+  </form>
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '6GuPJyur5SvWLxxrRyYf','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                FFmpeg的使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2014-06-09T16:21:56+00:00" content="2014-06-09">
+              2014-06-09
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/音频开发/" itemprop="url" rel="index">
+                    <span itemprop="name">音频开发</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/06/09/ffmpeg的使用/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/06/09/ffmpeg的使用/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p><img src="http://printf.qiniudn.com/20140616102021781.png" class="img-topic"></p>
+<p><img src="http://printf.qiniudn.com/20140616102021781.png" alt=""></p>
+<p>最近因为要音频处理的研究,音频开发，但是有一个难题就是怎么解析与提取音频的数据,于是就找到了<code>FFmpeg</code>。基本上只要做视频音频开发都离不开<code>ffmpeg</code></p>
+<a id="more"></a>
+<h2 id="1-_u4EC0_u4E48_u662Fffmpeg"><a href="#1-_u4EC0_u4E48_u662Fffmpeg" class="headerlink" title="1.什么是ffmpeg"></a>1.什么是ffmpeg</h2><p>引用<a href="http://zh.wikipedia.org/wiki/FFmpeg" target="_blank" rel="external">wiki百科</a>的解析.</p>
+<blockquote>
+<p>FFmpeg是一个自由软件，可以运行音频和视频多种格式的录影、转换、流功能<a href="http://ffmpeg.org/ffmpeg.html" target="_blank" rel="external">1</a>，包含了libavcodec ─这是一个用于多个项目中音频和视频的解码器库，以及libavformat——一个音频与视频格式转换库。</p>
+</blockquote>
+<ul>
+<li><code>ffmpeg</code>的官网地址是:<a href="https://www.ffmpeg.org/" target="_blank" rel="external">https://www.ffmpeg.org/</a></li>
+<li><p><code>ffmpeg</code>的Github项目地址是:<a href="https://github.com/FFmpeg/FFmpeg" target="_blank" rel="external">https://github.com/FFmpeg/FFmpeg</a></p>
+<h3 id="1-1__u7EC4_u4EF6"><a href="#1-1__u7EC4_u4EF6" class="headerlink" title="1.1 组件"></a>1.1 组件</h3><p><code>FFmpeg</code>项目由以下几部分组成：</p>
+</li>
+<li><p><code>FFmpeg</code>视频文件转换命令行工具,也支持经过实时电视卡抓取和编码成视频文件；</p>
+</li>
+<li><code>ffserver</code>基于<code>HTTP</code>、<code>RTSP</code>用于实时广播的多媒体服务器.也支持时间平移；</li>
+<li><code>ffplay</code>用 <code>SDL</code>和<code>FFmpeg</code>库开发的一个简单的媒体播放器；</li>
+<li><code>libavcodec</code>一个包含了所有<code>FFmpeg</code>音视频编解码器的库。为了保证最优性能和高可复用性，大多数编解码器从头开发的；</li>
+<li><code>libavformat</code>一个包含了所有的普通音视格式的解析器和产生器的库。<h3 id="1-2__u8C01_u5728_u4F7F_u7528ffmpeg"><a href="#1-2__u8C01_u5728_u4F7F_u7528ffmpeg" class="headerlink" title="1.2 谁在使用ffmpeg"></a>1.2 谁在使用<code>ffmpeg</code></h3></li>
+<li>使用FFMPEG作为内核视频播放器：<code>Mplayer</code>，<code>ffplay</code>，<code>射手播放器</code>，<code>暴风影音</code>，<code>KMPlayer</code>，<code>QQ影音</code>…</li>
+<li>使用FFMPEG作为内核的Directshow Filter：<code>ffdshow</code>，<code>lav filters</code>…</li>
+<li>使用FFMPEG作为内核的转码工具：<code>ffmpeg</code>，<code>格式工厂</code>…<h2 id="2-_u5982_u4F55_u5B89_u88C5"><a href="#2-_u5982_u4F55_u5B89_u88C5" class="headerlink" title="2.如何安装"></a>2.如何安装</h2><code>FFmpeg</code>可以在Windows、Linux还有Mac OS等多种操作系统中进行安装和使用。</li>
+</ul>
+<p>这篇文章主要介绍其在Windows下面的安装：</p>
+<ul>
+<li>下载编译好的Windows版本：<a href="http://ffmpeg.zeranoe.com/builds/（与官网同步）" target="_blank" rel="external">http://ffmpeg.zeranoe.com/builds/（与官网同步）</a><br><img src="http://printf.qiniudn.com/20140730113852.png" alt=""></li>
+<li>FFmpeg分为3个版本：<code>Static</code>、  <code>Shared</code>、 <code>Dev</code></li>
+<li>前两个版本可以直接在命令行中使用。包含了三个<code>exe</code>:<code>ffmpeg.exe</code>，<code>ffplay.exe</code>，<code>ffprobe.exe</code></li>
+<li><code>Static</code>版本中的<code>exe</code>体积较大,那是因为相关的<code>Dll</code>都已经编译进<code>exe</code>里面去了。</li>
+<li><code>Shared</code>版本中<code>exe</code>的体积相对小很多,是因为它们运行的时候还需要到相关的dll中调用相应的功能</li>
+<li><code>Dev</code>版本用于开发,里面包含了库文件<code>xxx.lib</code>以及头文件<code>xxx.h</code></li>
+</ul>
+<h2 id="3-_u600E_u4E48_u4F7F_u7528"><a href="#3-_u600E_u4E48_u4F7F_u7528" class="headerlink" title="3.怎么使用"></a>3.怎么使用</h2><h3 id="3-1__u547D_u4EE4_u884C_u5DE5_u5177_u7684_u4F7F_u7528"><a href="#3-1__u547D_u4EE4_u884C_u5DE5_u5177_u7684_u4F7F_u7528" class="headerlink" title="3.1 命令行工具的使用"></a>3.1 命令行工具的使用</h3><h4 id="3-11_ffmpeg-exe"><a href="#3-11_ffmpeg-exe" class="headerlink" title="3.11 ffmpeg.exe"></a>3.11 <code>ffmpeg.exe</code></h4><p>用于转码的应用程序:</p>
+<blockquote>
+<p>一个简单的转码命令 将input.avi转码成output.ts，并设置视频的码率为640kbps<br><figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">ffmpeg -<span class="tag">i</span> <span class="tag">input</span><span class="class">.avi</span> -<span class="tag">b</span>:v <span class="number">640</span>k output.ts</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>具体用法参考:   <a href="http://blog.csdn.net/leixiaohua1020/article/details/12751349" target="_blank" rel="external">ffmpeg参数中文详细解释</a><br>详细的使用说明（英文）：<a href="http://ffmpeg.org/ffmpeg.html" target="_blank" rel="external">http://ffmpeg.org/ffmpeg.html</a></p>
+<h4 id="3-12_ffplay-exe"><a href="#3-12_ffplay-exe" class="headerlink" title="3.12 ffplay.exe"></a>3.12 <code>ffplay.exe</code></h4><p>主要用于播放的应用程序</p>
+<blockquote>
+<p>播放test.avi</p>
+</blockquote>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="tag">ffplay</span> <span class="tag">test</span><span class="class">.avi</span></span><br></pre></td></tr></table></figure>
+<p>具体的使用方法可以参考：<a href="http://blog.csdn.net/leixiaohua1020/article/details/15186441" target="_blank" rel="external">ffplay的快捷键以及选项</a><br>详细的使用说明（英文）：<a href="http://ffmpeg.org/ffplay.html" target="_blank" rel="external">http://ffmpeg.org/ffplay.html</a></p>
+<h4 id="3-13_ffprobe-exe"><a href="#3-13_ffprobe-exe" class="headerlink" title="3.13 ffprobe.exe"></a>3.13 <code>ffprobe.exe</code></h4><p>ffprobe是用于查看文件格式的应用程序。<br>详细的使用说明（英文）：<a href="http://ffmpeg.org/ffprobe.html" target="_blank" rel="external">http://ffmpeg.org/ffprobe.html</a></p>
+<h3 id="3-2__u4F7F_u7528ffmpeg_u5E93_u8FDB_u884C_u5F00_u53D1"><a href="#3-2__u4F7F_u7528ffmpeg_u5E93_u8FDB_u884C_u5F00_u53D1" class="headerlink" title="3.2 使用ffmpeg库进行开发"></a>3.2 使用ffmpeg库进行开发</h3><p>##<strong>To Be Continue…</strong><br><strong>参考资料</strong> :</p>
+<ul>
+<li><a href="http://blog.csdn.net/leixiaohua1020/article/details/15811977" target="_blank" rel="external">FFMPEG视音频编解码零基础学习方法</a></li>
+<li><a href="http://yuanhuan.blog.51cto.com/3367116/1246370" target="_blank" rel="external">FFmpeg使用小记</a></li>
+<li><a href="http://ffmpeg.org/documentation.html" target="_blank" rel="external">FFmpeg官方文档</a></li>
+<li><a href="http://zh.wikihow.com/%E5%9C%A8Windows%E4%B8%8A%E5%AE%89%E8%A3%85FFmpeg%E7%A8%8B%E5%BA%8F" target="_blank" rel="external">如何在Windows上安装FFmpeg程序</a></li>
+<li><a href="http://alleni123.iteye.com/blog/2028433" target="_blank" rel="external">ffmpeg教程 (一) 基本安装</a></li>
+</ul>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/工具/" rel="tag">#工具</a>
+          
+            <a href="/tags/教程/" rel="tag">#教程</a>
+          
+            <a href="/tags/音频/" rel="tag">#音频</a>
+          
+            <a href="/tags/音频开发/" rel="tag">#音频开发</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/06/04/快速求幂算法/" rel="next" title="快速求幂算法">
+                <i class="fa fa-chevron-left"></i> 快速求幂算法
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/06/09/hexo-多标签/" rel="prev" title="hexo 多标签">
+                hexo 多标签 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+            <!-- 多说热评文章-->
+            <p>热评文章</p>
+            <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+        
+
+        
+          <div class="comments" id="comments">
+            
+              <div class="ds-thread" data-thread-key="2014/06/09/ffmpeg的使用/"
+                   data-title="FFmpeg的使用" data-url="http://diary.printf.me/2014/06/09/ffmpeg的使用/">
+              </div>
+            
+          </div>
+        
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="https://avatars1.githubusercontent.com/u/4208883?v=3&s=460" alt="zhiyue" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">zhiyue</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description"></p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zhiyue" target="_blank">
+                  <i class="fa fa-github"></i> github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/2372807992" target="_blank">
+                  <i class="fa fa-weibo"></i> weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/47771675" target="_blank">
+                  <i class="fa fa-douban"></i> douban
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-_u4EC0_u4E48_u662Fffmpeg"><span class="nav-number">1.</span> <span class="nav-text">1.什么是ffmpeg</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1__u7EC4_u4EF6"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2__u8C01_u5728_u4F7F_u7528ffmpeg"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 谁在使用ffmpeg</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-_u5982_u4F55_u5B89_u88C5"><span class="nav-number">2.</span> <span class="nav-text">2.如何安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-_u600E_u4E48_u4F7F_u7528"><span class="nav-number">3.</span> <span class="nav-text">3.怎么使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1__u547D_u4EE4_u884C_u5DE5_u5177_u7684_u4F7F_u7528"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 命令行工具的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-11_ffmpeg-exe"><span class="nav-number">3.1.1.</span> <span class="nav-text">3.11 ffmpeg.exe</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-12_ffplay-exe"><span class="nav-number">3.1.2.</span> <span class="nav-text">3.12 ffplay.exe</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-13_ffprobe-exe"><span class="nav-number">3.1.3.</span> <span class="nav-text">3.13 ffprobe.exe</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2__u4F7F_u7528ffmpeg_u5E93_u8FDB_u884C_u5F00_u53D1"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 使用ffmpeg库进行开发</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2015</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhiyue</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zhiyue"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+
+    
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+
+      motionIntegrator.bootstrap();
+    });
+  </script>
+
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+
+  
+    <script type="text/javascript" src="http://cdn.staticfile.org/mathjax/2.4.0/MathJax.js"></script>
+    <script type="text/javascript" src="http://cdn.staticfile.org/mathjax/2.4.0/config/TeX-AMS-MML_HTMLorMML.js"></script>
+  
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>

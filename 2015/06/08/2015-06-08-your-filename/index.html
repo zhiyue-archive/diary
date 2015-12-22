@@ -53,7 +53,7 @@
 <meta property="og:description">
 <meta property="og:image" content="http://zhiyue.qiniudn.com/15-6-8/63734849.jpg">
 <meta property="og:image" content="http://zhiyue.qiniudn.com/15-6-8/23580903.jpg">
-<meta property="og:updated_time" content="2015-10-23T09:57:13.870Z">
+<meta property="og:updated_time" content="2015-12-22T07:59:42.369Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Docker部署IPython">
 <meta name="twitter:description">
@@ -286,12 +286,12 @@
 </li>
 </ul>
 <p>本文主要记录使用Docker 在服务器部署IPython Note 应用的过程。比传统的部署方案果然简单轻松不少。</p>
-<h4 id="知识点">知识点</h4><ol>
+<h4 id="u77E5_u8BC6_u70B9"><a href="#u77E5_u8BC6_u70B9" class="headerlink" title="知识点"></a>知识点</h4><ol>
 <li>Docker 的基本概念</li>
 <li>部署IPython 容器</li>
 <li>使用Nginx 容器反向代理IPython </li>
 </ol>
-<h3 id="Docker_的基本概念">Docker 的基本概念</h3><p>下文的操作主要涉及Docker的一下几个知识点：</p>
+<h3 id="Docker__u7684_u57FA_u672C_u6982_u5FF5"><a href="#Docker__u7684_u57FA_u672C_u6982_u5FF5" class="headerlink" title="Docker 的基本概念"></a>Docker 的基本概念</h3><p>下文的操作主要涉及Docker的一下几个知识点：</p>
 <ul>
 <li>Docker 的镜像(image)、容器(container)、仓库(registerie)</li>
 <li>Docker 的安装</li>
@@ -301,7 +301,7 @@
 <li>链接容器</li>
 </ul>
 <p>详细的信息可以自行搜索</p>
-<h3 id="部署IPython">部署IPython</h3><h4 id="下载IPython_的镜像">下载IPython 的镜像</h4><p>官方Docker镜像<a href="https://registry.hub.docker.com/repos/ipython/" target="_blank" rel="external">地址</a>，里面包含5个镜像:</p>
+<h3 id="u90E8_u7F72IPython"><a href="#u90E8_u7F72IPython" class="headerlink" title="部署IPython"></a>部署IPython</h3><h4 id="u4E0B_u8F7DIPython__u7684_u955C_u50CF"><a href="#u4E0B_u8F7DIPython__u7684_u955C_u50CF" class="headerlink" title="下载IPython 的镜像"></a>下载IPython 的镜像</h4><p>官方Docker镜像<a href="https://registry.hub.docker.com/repos/ipython/" target="_blank" rel="external">地址</a>，里面包含5个镜像:</p>
 <ul>
 <li>notebook</li>
 <li>ipython</li>
@@ -310,10 +310,10 @@
 <li>nbvierer</li>
 </ul>
 <p>简单说一下这几个镜像的区别 <code>ipython</code> 是以上几个镜像的共同的根镜像。<code>notebook</code> 提供了一个web的前端。<code>scipystack</code>在<code>ipython</code>的基础上安装了许多科学计算的包(cython,h5py,matplotlib,numpy,pandas,patsy,scikit-learn,scipy,seaborn,sympy,yt)，而<code>scipyserver</code>则在<code>scipystack</code>的基础上提供了web的前端。<code>nbviewer</code>则是<a href="nbviewer.ipython.org">nbviewer.ipython.org</a>的实现<br>更多详细信息请到GitHub上的<a href="https://github.com/ipython/docker-notebook" target="_blank" rel="external">docker-notebook</a> 查看<br>选择<code>scipystack</code>镜像最省事，但是需要下载的东西也越多。下文选择的也是<code>scipystack</code><br><figure class="highlight crystal"><table><tr><td class="code"><pre><span class="line"><span class="variable">$ </span>sudo docker pull ipython/scipyserver</span><br></pre></td></tr></table></figure></p>
-<h4 id="运行IPython_容器">运行IPython 容器</h4><figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">sudo docker run -d --name IPythonApp -p <span class="number">8888</span>:<span class="number">8888</span> -e <span class="string">"PASSWORD=your password"</span> -e <span class="string">"USE_HTTP=1"</span> -v <span class="regexp">/home/</span>zhiyue<span class="regexp">/repos/</span>ipython-<span class="string">notebook:</span><span class="regexp">/notebooks ipython/</span>scipyserver</span><br></pre></td></tr></table></figure>
+<h4 id="u8FD0_u884CIPython__u5BB9_u5668"><a href="#u8FD0_u884CIPython__u5BB9_u5668" class="headerlink" title="运行IPython 容器"></a>运行IPython 容器</h4><figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">sudo docker run -d --name IPythonApp -p <span class="number">8888</span>:<span class="number">8888</span> -e <span class="string">"PASSWORD=your password"</span> -e <span class="string">"USE_HTTP=1"</span> -v <span class="regexp">/home/</span>zhiyue<span class="regexp">/repos/</span>ipython-<span class="string">notebook:</span><span class="regexp">/notebooks ipython/</span>scipyserver</span><br></pre></td></tr></table></figure>
 <p>解析一下参数<code>-d</code> 是以后台的方式运行，<code>--name</code> 是容器的别名，<code>-p</code> 是端口映射，<code>-e</code> 是设置环境变量，这里的环境变量<code>PASSWORD</code>设置成你自己的密码就可以了，<code>USE_HTTP=1</code> 意思是使用http，<code>-v</code> 是设置数据卷，把宿主机的目录挂载到容器里，即使容器被删除，数据也可以保留下来</p>
-<h3 id="Nginx_反向代理_IPython">Nginx 反向代理 IPython</h3><p>有两种方式，一种是使用官方的Nginx，另一种是使用<a href="https://registry.hub.docker.com/u/jwilder/nginx-proxy/" target="_blank" rel="external">jwilder / nginx-proxy</a>，后一种方法更加简单和方便</p>
-<h4 id="方式1：nginx">方式1：nginx</h4><ul>
+<h3 id="Nginx__u53CD_u5411_u4EE3_u7406_IPython"><a href="#Nginx__u53CD_u5411_u4EE3_u7406_IPython" class="headerlink" title="Nginx 反向代理 IPython"></a>Nginx 反向代理 IPython</h3><p>有两种方式，一种是使用官方的Nginx，另一种是使用<a href="https://registry.hub.docker.com/u/jwilder/nginx-proxy/" target="_blank" rel="external">jwilder / nginx-proxy</a>，后一种方法更加简单和方便</p>
+<h4 id="u65B9_u5F0F1_uFF1Anginx"><a href="#u65B9_u5F0F1_uFF1Anginx" class="headerlink" title="方式1：nginx"></a>方式1：nginx</h4><ul>
 <li><p>使用Nginx的官方镜像<a href="https://registry.hub.docker.com/_/nginx/" target="_blank" rel="external">nginx</a></p>
 </li>
 <li><p>Nginx 配置文件<br><code>ipython-server.conf</code></p>
@@ -325,7 +325,7 @@
 <li>运行Nginx容器<figure class="highlight stata"><table><tr><td class="code"><pre><span class="line">$ sudo docker <span class="keyword">run</span> -<span class="keyword">d</span> -p 80:80 --name nginx --link IPythonApp:ipython  -v `<span class="keyword">pwd</span>`/config:/etc/nginx/<span class="keyword">conf</span>.<span class="keyword">d</span>  -v `<span class="keyword">pwd</span>`/logs:/<span class="keyword">var</span>/<span class="keyword">log</span>/nginx nginx</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<h4 id="方式2：nginx-proxy">方式2：nginx-proxy</h4><ul>
+<h4 id="u65B9_u5F0F2_uFF1Anginx-proxy"><a href="#u65B9_u5F0F2_uFF1Anginx-proxy" class="headerlink" title="方式2：nginx-proxy"></a>方式2：nginx-proxy</h4><ul>
 <li><p><a href="https://registry.hub.docker.com/u/jwilder/nginx-proxy/" target="_blank" rel="external">jwilder / nginx-proxy</a></p>
 </li>
 <li><p>运行nginx-proxy 容器</p>
@@ -339,7 +339,7 @@
 <p>最后放一张图：</p>
 <p><img src="http://zhiyue.qiniudn.com/15-6-8/23580903.jpg" alt=""></p>
 <p>这样就可以随时通过web来使用python了。</p>
-<h3 id="参考">参考</h3><ul>
+<h3 id="u53C2_u8003"><a href="#u53C2_u8003" class="headerlink" title="参考"></a>参考</h3><ul>
 <li><p><a href="http://blog.opskumu.com/docker.html" target="_blank" rel="external">Docker 笔记 By 枯木</a></p>
 </li>
 <li><p><a href="http://godleon.github.io/blog/2014/11/23/use-docker-to-rapidly-create-ipython-notebook-environments/" target="_blank" rel="external">[Docker] 快速建立 IPython Notebook 環境</a></p>
@@ -376,12 +376,16 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2015/05/19/Monty-Hall-problem/" rel="next" title="用python验证蒙提霍尔问题">
+                <i class="fa fa-chevron-left"></i> 用python验证蒙提霍尔问题
+              </a>
+            
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/10/23/hello-world/" rel="prev" title="Hello World">
-                Hello World <i class="fa fa-chevron-right"></i>
+              <a href="/2015/06/08/use-docker-deplay-ipython-notebook/" rel="prev" title="使用Docker部署IPython">
+                使用Docker部署IPython <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -455,21 +459,21 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-count">9</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             
-              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-count">7</span>
               <span class="site-state-item-name">分类</span>
               
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-count">18</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -530,7 +534,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#知识点"><span class="nav-number">1.</span> <span class="nav-text">知识点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker_的基本概念"><span class="nav-number"></span> <span class="nav-text">Docker 的基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部署IPython"><span class="nav-number"></span> <span class="nav-text">部署IPython</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#下载IPython_的镜像"><span class="nav-number">1.</span> <span class="nav-text">下载IPython 的镜像</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行IPython_容器"><span class="nav-number">2.</span> <span class="nav-text">运行IPython 容器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Nginx_反向代理_IPython"><span class="nav-number"></span> <span class="nav-text">Nginx 反向代理 IPython</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#方式1：nginx"><span class="nav-number">1.</span> <span class="nav-text">方式1：nginx</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方式2：nginx-proxy"><span class="nav-number">2.</span> <span class="nav-text">方式2：nginx-proxy</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number"></span> <span class="nav-text">参考</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#u77E5_u8BC6_u70B9"><span class="nav-number">1.</span> <span class="nav-text">知识点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker__u7684_u57FA_u672C_u6982_u5FF5"><span class="nav-number"></span> <span class="nav-text">Docker 的基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u90E8_u7F72IPython"><span class="nav-number"></span> <span class="nav-text">部署IPython</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u4E0B_u8F7DIPython__u7684_u955C_u50CF"><span class="nav-number">1.</span> <span class="nav-text">下载IPython 的镜像</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u8FD0_u884CIPython__u5BB9_u5668"><span class="nav-number">2.</span> <span class="nav-text">运行IPython 容器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Nginx__u53CD_u5411_u4EE3_u7406_IPython"><span class="nav-number"></span> <span class="nav-text">Nginx 反向代理 IPython</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u65B9_u5F0F1_uFF1Anginx"><span class="nav-number">1.</span> <span class="nav-text">方式1：nginx</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u65B9_u5F0F2_uFF1Anginx-proxy"><span class="nav-number">2.</span> <span class="nav-text">方式2：nginx-proxy</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u53C2_u8003"><span class="nav-number"></span> <span class="nav-text">参考</span></a></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
